@@ -17,7 +17,7 @@ class LineaDetailController(APIView):
         result = use_case.execute(GetLineaInput(id=pk))
 
         if not result:
-            return Response({'error': 'Linea not found'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'error': 'Linea no encontrada'}, status=status.HTTP_404_NOT_FOUND)
 
         return Response(
             {

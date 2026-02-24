@@ -31,6 +31,7 @@ class LineaListController(APIView):
                 'linea_numero': r.linea_numero,
                 'estado_linea': r.estado_linea,
                 'fecha_instalacion': r.fecha_instalacion,
+                'saldo_vencido': r.saldo_vencido,
             }
             for r in result
         ]

@@ -6,12 +6,14 @@
 - Django REST Framework
 - PostgreSQL (via psycopg2)
 - python-decouple (env vars)
+- python-decouple (env vars)
+- Redis
 
-## Arquitectura
+## Estructura del proyecto
 
 ```
 apps/products/
-├── controllers/       ← Recibe la request HTTP (equivale al Controller)
+├── controllers/       ← Recibe la request HTTP
 ├── use_cases/         ← Lógica de negocio pura
 ├── repositories/      ← Acceso a base de datos
 ├── models.py          ← Modelos ORM de Django
@@ -22,14 +24,32 @@ apps/products/
 
 | Método | URL             | Descripción          |
 |--------|-----------------|----------------------|
+| GET   | /api/clientes  | Listar todos los clientes    |
+| POST   | /api/clientes/  | Crea un cliente     |
+| GET   | /api/clientes/{id}/  | Busca cliente por id     |
+| PATCH   | /api/clientes/{id}/  | Actualiza parcialmente un cliente     |
+| DELETE   | /api/clientes/{id}/  | Eliminacion logica de un cliente     |
+| GET   | /api/lineas/  | Lista las lineas del cliente     |
+| POST   | /api/lineas/  | Crea una linea     |
+| POST   | /api/lineas/{id}/  | Obtiene una linea por su id     |
+| PATCH   | /api/lineas/{id}/  | Actualiza parcialmente una linea     |
+| DELETE   | /api/lineas/{id}/  | Eliminación lógica de una linea     |
+| POST   | /api/products/  | Crea un producto     |
+| POST   | /api/products/  | Crea un producto     |
+| POST   | /api/products/  | Crea un producto     |
+| POST   | /api/products/  | Crea un producto     |
+| POST   | /api/products/  | Crea un producto     |
+| POST   | /api/products/  | Crea un producto     |
+| POST   | /api/products/  | Crea un producto     |
 | POST   | /api/products/  | Crea un producto     |
 
-### Request body
+### Request body new line
 ```json
 {
-  "name": "Laptop",
-  "price": 999.99,
-  "stock": 10
+  "cliente_id": 2,
+  "cliente_razon_social": "test",
+  "linea_numero": "1",
+  "estado_linea": "activo"
 }
 ```
 
@@ -37,17 +57,41 @@ apps/products/
 ```json
 {
   "id": 1,
-  "name": "Laptop",
-  "price": 999.99,
-  "stock": 10
+  "cliente_id": 1,
+  "cliente_razon_social": "test",
+  "linea_numero": 1,
+  "estado_linea": "activo",
+  "fecha_instalacion": null,
+  "saldo_vencido": 0.0
 }
 ```
 
-## Setup
+### Request body new client
+```json
+{
+  "identificacion": "2",
+  "razon_social": "test",
+  "email": "test@hotmail.com",
+  "celular": "0999222"
+}
+```
+
+### Response 201
+```json
+{
+  "id": 1,
+  "identificacion": "1",
+  "razon_social": "test",
+  "email": "test@hotmail.com",
+  "celular": "0999222"
+}
+```
+
+## Despliegue local
 
 ```bash
 # 1. Clonar / descomprimir el proyecto
-cd django_project
+cd django_celery
 
 # 2. Crear entorno virtual
 python -m venv venv
@@ -70,8 +114,22 @@ python manage.py migrate
 python manage.py runserver
 ```
 
-## Notas sobre decisiones tomadas
+## Despliegue docker
+```bash
+# 1. Levantar contenedores
+docker compose up --build
+```
 
-- **"Controller" en Django**: Django no usa el patrón MVC clásico — su capa de presentación se llama *View*. Aquí se respetó el nombre `ProductController` extendiéndolo de `APIView` para mantener la intención arquitectónica sin romper la integración con DRF.
-- **Serializers de DRF**: En un proyecto más grande lo correcto sería usar `serializers.Serializer` para validar el payload. Aquí se omitieron para mantener la separación de capas clara y que la validación sencilla viva en el use case. Si lo necesitás te lo agrego.
-- **Inyección de dependencias**: El use case recibe el repository por constructor, lo que permite mockearlo fácilmente en tests sin frameworks externos.
+
+## Env de ejemplo
+```bash
+SECRET_KEY=your-secret-key-here
+DEBUG=True
+DB_NAME=postgres
+DB_USER=postgres
+DB_PASSWORD=1234
+DB_HOST=localhost
+DB_PORT=5432
+CELERY_BROKER_URL=redis://redis:6379/0
+```
+

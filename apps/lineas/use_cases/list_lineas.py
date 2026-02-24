@@ -18,6 +18,7 @@ class LineaOutput:
     linea_numero: int
     estado_linea: str
     fecha_instalacion: str
+    saldo_vencido: int
 
 
 class ListLineasUseCase:
@@ -36,6 +37,7 @@ class ListLineasUseCase:
                 cliente_razon_social=l.cliente.razon_social,
                 linea_numero=l.linea_numero,
                 estado_linea=l.estado_linea,
+                saldo_vencido=l.saldo_vencido,
                 fecha_instalacion=str(l.fecha_instalacion) if l.fecha_instalacion else None,
             )
             for l in lineas

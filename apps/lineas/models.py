@@ -32,6 +32,12 @@ class LineaServicio(AuditDateModel):
         choices=EstadoLinea.choices
     )
 
+    saldo_vencido = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        default=0
+    )
+
     fecha_instalacion = models.DateField(null=True, blank=True)
 
     is_active = models.BooleanField(default=True)
