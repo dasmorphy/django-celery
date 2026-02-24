@@ -1,0 +1,2 @@
+from .cliente_list_controller import ClienteListController
+from .cliente_detail_controller import ClienteDetailController

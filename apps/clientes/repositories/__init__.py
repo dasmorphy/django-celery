@@ -1,0 +1,1 @@
+from .cliente_repository import ClienteRepository
